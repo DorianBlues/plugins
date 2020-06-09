@@ -63,6 +63,13 @@ export default function commonjs(options = {}) {
 
   function transformAndCheckExports(code, id) {
     const { isEsModule, hasDefaultExport, ast } = checkEsModule(this.parse, code, id);
+    const isMixedModule = isEsModule && hasCjsKeywords(code, ignoreGlobal)
+
+    if (isMixedModule) {
+      this.warn(
+        'It‘s not recommend to mix esm and cjs module.'
+      );
+    }
 
     const isDynamicRequireModule = dynamicRequireModuleSet.has(normalizePathSlashes(id));
 
